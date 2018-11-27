@@ -7,25 +7,27 @@ import argparse
 import imutils
 import cv2
 import math
+import scipy.sparse as sp
+import scipy.sparse.linalg as spln
 
+def lognormpdf(x,mu,S):
+    """ Calculate gaussian probability density of x, when x ~ N(mu,sigma) """
+    nx = len(S)
+    norm_coeff = nx*math.log(2*math.pi)+np.linalg.slogdet(S)[1]
 
-def norm_pdf_multivariate(x, mu, sigma):
-    size = len(x)
-    if size == len(mu) and (size, size) == sigma.shape:
-        det = linalg.det(sigma)
-        if det == 0:
-            raise NameError("The covariance matrix can't be singular")
-
-        norm_const = 1.0/ ( math.pow((2*pi),float(size)/2) * math.pow(det,1.0/2) )
-        x_mu = matrix(x - mu)
-        inv = sigma.I
-        result = math.pow(math.e, -0.5 * (x_mu * inv * x_mu.T))
-        return norm_const * result
+    err = x-mu
+    if (sp.issparse(S)):
+        numerator = spln.spsolve(S, err).T.dot(err)
     else:
-        raise NameError("The dimensions of the input don't match")
+        numerator = np.linalg.solve(S, err).T.dot(err)
+
+    return -0.5*(norm_coeff+numerator)
+
 
 # load the image, convert it to grayscale, and blur it
 image = cv2.imread("/Users/ClaudiaEspinoza/Desktop/Patter Recognition/duck.jpg")
+image = image[7800:-5900, 2000:-3000]
+cv2.imwrite('cut_try.png',image)
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 blurred = cv2.GaussianBlur(gray, (11, 11), 0)
 
@@ -70,9 +72,10 @@ print(cov_w1)
 
 for i in range(len(data_color)):
 	for j in range(len(data_color[i])):
-		w0 = norm_pdf_multivariate(data_color[i][j], mean_w0, cov_w0)
-		w1 = norm_pdf_multivariate(data_color[i][j], mean_w1, cov_w1)
+		w0 = lognormpdf(data_color[i][j], mean_w0, cov_w0)
+		w1 = lognormpdf(data_color[i][j], mean_w1, cov_w1)
 		if(w0>w1):
+			print("w0 = ", str(w0), "  w1 = ", str(w1))
 			data_color[i][j] = [255,0,0]
 
 cv2.imwrite('output_try.png',data_color)
