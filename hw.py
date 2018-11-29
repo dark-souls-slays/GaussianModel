@@ -27,9 +27,11 @@ def lognormpdf(x,mu,S):
 
 #load the image, convert it to grayscale, and blur it
 image = cv2.imread("/Users/ClaudiaEspinoza/Desktop/Patter Recognition/duck.jpg")
+not_ducks = cv2.imread("/Users/ClaudiaEspinoza/Desktop/Patter Recognition/not_ducks.jpg")
 image_cut = image[7200:-5400, 2000:-2000]
-image = image[8000:-3600, 2000:-3000]
+image = image[6000:-4600, :-1000]
 cv2.imwrite('cut_try.png',image_cut)
+cv2.imwrite('working_on.png',image)
 gray = cv2.cvtColor(image_cut, cv2.COLOR_BGR2GRAY)
 blurred = cv2.GaussianBlur(gray, (11, 11), 0)
 
@@ -56,12 +58,16 @@ for i in range(len(data)):
 	for j in range(len(data[i])):
 		if data[i][j] == 255:
 			gaussian_data_w0 = np.append(gaussian_data_w0, [data_color_cut[i][j]], axis = 0)
-		else:
-			gaussian_data_w1 = np.append(gaussian_data_w1, [data_color_cut[i][j]], axis = 0)
-        print(data_color_cut[i][j])
+		#else:
+		#	gaussian_data_w1 = np.append(gaussian_data_w1, [data_color_cut[i][j]], axis = 0)
+        #print(data_color_cut[i][j])
 	print(i)
 
-
+not_ducks = np.array(not_ducks)
+print(not_ducks.shape)
+print(len(not_ducks))
+print(len(not_ducks[0]))
+gaussian_data_w1 = not_ducks.reshape(len(not_ducks)*len(not_ducks[0]),3)
 #Gaussian distribution
 
 mean_w0 = np.mean(gaussian_data_w0, axis = 0)
@@ -79,9 +85,11 @@ for i in range(len(data_color)):
 		w1 = lognormpdf(data_color[i][j], mean_w1, cov_w1)
 		if(w0>w1):
 			data_color[i][j] = [255,0,0]
+        else:
+            data_color[i][j] = [0,0,0]
         print(i)
 
-cv2.imwrite('output.png',data_color)
+cv2.imwrite('output3.png',data_color)
 
 
 #f = np.exp(-np.square(x-mean)/2*variance)/(np.sqrt(2*np.pi*variance))
