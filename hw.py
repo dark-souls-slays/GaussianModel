@@ -10,7 +10,7 @@ import scipy.sparse.linalg as spln
 
 image = cv2.imread("/Users/ClaudiaEspinoza/Desktop/Patter Recognition/duck.jpg")
 not_ducks = cv2.imread("/Users/ClaudiaEspinoza/Desktop/Patter Recognition/not_ducks.jpg")
-ducks = cv2.imread("/Users/ClaudiaEspinoza/Desktop/Patter Recognition/ducks.jpg")
+ducks = cv2.imread("/Users/ClaudiaEspinoza/Desktop/Patter Recognition/is_ducks.jpg")
 
 data_color = np.array(image)
 print(data_color.shape)
