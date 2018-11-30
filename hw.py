@@ -1,7 +1,5 @@
 import matplotlib.pyplot as plt
 from scipy.stats import multivariate_normal
-#from imutils import contours
-#from skimage import measure
 import numpy as np
 import argparse
 import imutils
@@ -13,8 +11,7 @@ import scipy.sparse.linalg as spln
 image = cv2.imread("/Users/ClaudiaEspinoza/Desktop/Patter Recognition/duck.jpg")
 not_ducks = cv2.imread("/Users/ClaudiaEspinoza/Desktop/Patter Recognition/not_ducks.jpg")
 ducks = cv2.imread("/Users/ClaudiaEspinoza/Desktop/Patter Recognition/ducks.jpg")
-#image = image[:-9600, 1000:-500]
-#cv2.imwrite('working_on.png',image)
+
 data_color = np.array(image)
 print(data_color.shape)
 
