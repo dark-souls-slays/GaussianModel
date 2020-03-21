@@ -9,6 +9,9 @@ Machine Learning </b>
 Our example is a trivial way to demonstrate the Bayesian Theorem, given that we
 only need the likelihood to estimate the posterior probability.
 
+original image<br>
+![alt text](https://github.com/dark-souls-slays/GaussianModel/blob/master/original.jpg)
+
 <b>Getting the value for the Gaussian Distribution<br></b>
 1. Collect areas of the picture where ducks don't appear and merge them into a single image
 2. Collect duck bodies pixels and merge them into a single image
